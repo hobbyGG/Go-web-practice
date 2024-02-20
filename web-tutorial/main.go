@@ -26,15 +26,19 @@ func main() {
 	}
 
 	//网页处理
+	//go内置handler，handler是个有SeverHTTP方法的类型
+	//NotFOundHandler、RedirectHandler、StripPrefix、TimeoutHandler、FileSever
 	mh := &helloHandler{}
 	a := &aboutHandler{}
 	http.Handle("/hello", mh)
 	http.Handle("/about", a)
-	//Handle
+	
+	//HandleFunc是要传入一个与SeverHTTP参数一样的函数，该函数会被转换为具有SeverHTTP方法的HandlerFunc类型
 	http.HandleFunc("/home", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("Home."))
 	})
-	http.HandleFunc("/welcome", http.HandlerFunc(welcom)) //可以直接传welcome，此为底层
+	http.HandleFunc("/welcome", http.HandlerFunc(welcom)) //可以直接传welcome，HandlerFunc有Handler方法，本质还是调用handler
+	
 	//开始监听
 	server.ListenAndServe()
 
